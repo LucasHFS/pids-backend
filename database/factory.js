@@ -36,10 +36,3 @@ Factory.blueprint('App/Models/Bond', faker => {
     name: faker.name(),
   }
 })
-
-Factory.blueprint('App/Models/Movie', (faker, index, data) => {
-  return {
-    title: faker.sentence(),
-    ...data
-  }
-})

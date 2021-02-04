@@ -8,18 +8,20 @@ trait('Auth/Client')
 
 test('can create a challenge if valid data', async ({ assert, client }) => {
 
+  const course = await Factory.model('App/Models/Course').make()
+  const bond = await Factory.model('App/Models/Bond').make()
+
   const { name, email, cpf, password, vinculo_id, curso_id } = await Factory.model(
     'App/Models/User'
   ).make()
-
 
   const data = {
     name,
     email,
     cpf,
     password,
-    vinculo_id,
-    curso_id
+    bond_id: bond.id,
+    course_id: course.id
   }
 
   const response = await client
@@ -34,8 +36,8 @@ test('can create a challenge if valid data', async ({ assert, client }) => {
     email: data.email,
     cpf: data.cpf,
     password: data.password, //encrypted
-    vinculo_id: data.vinculo_id,
-    curso_id: data.curso_id
+    bond_id: data.bond_id,
+    course_id: data.course_id
 
   })
 })
