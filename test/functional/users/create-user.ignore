@@ -1,0 +1,42 @@
+'use strict'
+
+const Factory = use('Factory')
+const { test, trait } = use('Test/Suite')('Create Challenge')
+
+trait('Test/ApiClient')
+trait('Auth/Client')
+
+test('can create a challenge if valid data', async ({ assert, client }) => {
+
+  const { name, email, cpf, password, vinculo_id, curso_id } = await Factory.model(
+    'App/Models/User'
+  ).make()
+
+
+  const data = {
+    name,
+    email,
+    cpf,
+    password,
+    vinculo_id,
+    curso_id
+  }
+
+  const response = await client
+    .post('/api/users')
+    .send(data)
+    .end()
+
+  response.assertStatus(201)
+
+  response.assertJSONSubset({
+    name: data.name,
+    email: data.email,
+    cpf: data.cpf,
+    password: data.password, //encrypted
+    vinculo_id: data.vinculo_id,
+    curso_id: data.curso_id
+
+  })
+})
+
