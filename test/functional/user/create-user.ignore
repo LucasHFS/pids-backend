@@ -1,12 +1,12 @@
 'use strict'
 
 const Factory = use('Factory')
-const { test, trait } = use('Test/Suite')('Create Challenge')
+const { test, trait } = use('Test/Suite')('Create User')
 
 trait('Test/ApiClient')
 trait('Auth/Client')
 
-test('can create a challenge if valid data', async ({ assert, client }) => {
+test('can create a User if valid data', async ({ assert, client }) => {
 
   const course = await Factory.model('App/Models/Course').make()
   const bond = await Factory.model('App/Models/Bond').make()

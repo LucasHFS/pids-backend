@@ -2,24 +2,25 @@
 
 const Factory = use('Factory')
 
-const { test, trait } = use('Test/Suite')('Create Course')
+const { test, trait } = use('Test/Suite')('Create Role')
 
 trait('Test/ApiClient')
 trait('Auth/Client')
 
-test('can create a course if valid data', async ({ assert, client }) => {
+test('can create a role if valid data', async ({ assert, client }) => {
 
-  const { name } = await Factory.model(
-    'App/Models/Course'
+  const { name, description } = await Factory.model(
+    'App/Models/Role'
   ).make()
 
 
   const data = {
-    name
+    name,
+    description
   }
 
   const response = await client
-    .post('/api/courses')
+    .post('/api/roles')
     .send(data)
     .end()
 
@@ -27,17 +28,18 @@ test('can create a course if valid data', async ({ assert, client }) => {
 
   response.assertJSONSubset({
     name: data.name,
+    description: data.description
   })
 })
 
-test('cannot create a course if no name', async ({ assert, client }) => {
-  const {  } = await Factory.model('App/Models/Course').make()
+test('cannot create a role if no name', async ({ assert, client }) => {
+  const {  } = await Factory.model('App/Models/Role').make()
 
   const data = {
   }
 
   const response = await client
-    .post('/api/courses')
+    .post('/api/roles')
     .send(data)
     .end()
 

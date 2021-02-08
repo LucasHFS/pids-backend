@@ -36,3 +36,10 @@ Factory.blueprint('App/Models/Bond', faker => {
     name: faker.name(),
   }
 })
+
+Factory.blueprint('App/Models/Role', faker => {
+  return {
+    name: faker.name(),
+    description: faker.name(),
+  }
+})

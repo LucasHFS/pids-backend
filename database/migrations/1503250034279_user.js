@@ -11,8 +11,9 @@ class UserSchema extends Schema {
       table.string('email', 254).notNullable().unique()
       table.string('name', 80).notNullable()
       table.string('cpf', 11).notNullable().unique()
-      // FK: bond_id 
-      // FK: course_id
+      table.integer('bond_id').unsigned().references('id').inTable('bonds')
+      table.integer('user_courses_id').unsigned().references('id').inTable('user_courses')
+      table.integer('user_roles_id').unsigned().references('id').inTable('user_roles')
       table.string('password', 60).notNullable()
       table.timestamps()
     })

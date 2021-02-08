@@ -38,3 +38,11 @@ Route.group(()=>{
   Route.put('/:id', 'BondController.update').validator('CreateBond')
   Route.delete('/:id', 'BondController.destroy')
 }).prefix('/api/bonds');
+
+Route.group(()=>{
+  Route.get('/', 'RoleController.all')
+  Route.get('/:id', 'RoleController.show')
+  Route.post('/', 'RoleController.store').validator('CreateRole')
+  Route.put('/:id', 'RoleController.update').validator('CreateRole')
+  Route.delete('/:id', 'RoleController.destroy')
+}).prefix('/api/roles');

@@ -2,7 +2,7 @@
 
 const Factory = use('Factory')
 
-const { test, trait } = use('Test/Suite')('Create Challenge')
+const { test, trait } = use('Test/Suite')('Create Bond')
 
 trait('Test/ApiClient')
 trait('Auth/Client')
