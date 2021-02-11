@@ -6,9 +6,9 @@ const Schema = use('Schema')
 class UserRolesSchema extends Schema {
   up () {
     this.create('user_role', (table) => {
+      table.increments()
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.integer('role_id').unsigned().references('id').inTable('roles')
-      table.increments()
       table.timestamps()
     })
   }

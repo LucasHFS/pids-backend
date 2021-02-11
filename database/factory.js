@@ -16,11 +16,10 @@ const Factory = use('Factory')
 
 Factory.blueprint('App/Models/User', faker => {
   return {
-    username: faker.username(),
+    name: faker.username(),
     email: faker.email(),
     cpf: faker.cpf(),
-    vinculo_id: faker.number(),
-    curso_id: faker.number(),
+    bond_id: 1,
     password: 'password123',
   }
 })

@@ -46,3 +46,11 @@ Route.group(()=>{
   Route.put('/:id', 'RoleController.update').validator('CreateRole')
   Route.delete('/:id', 'RoleController.destroy')
 }).prefix('/api/roles');
+
+Route.group(()=>{
+  Route.get('/', 'UserController.all')
+  Route.get('/:id', 'UserController.show')
+  Route.post('/', 'UserController.store').validator('CreateUser')
+  Route.put('/:id', 'UserController.update').validator('CreateUser')
+  Route.delete('/:id', 'UserController.destroy')
+}).prefix('/api/users');
