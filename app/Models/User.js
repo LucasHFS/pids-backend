@@ -36,11 +36,15 @@ class User extends Model {
   }
 
   courses() {
-    return this.belongsToMany('App/Models/Courses')
+    return this.belongsToMany('App/Models/Course').pivotTable('user_course')
   }
 
   roles() {
-    return this.belongsToMany('App/Models/Roles')
+    return this.belongsTo('App/Models/Role')
+  }
+
+  bonds() {
+    return this.belongsTo('App/Models/Bond')
   }
 
 }

@@ -6,7 +6,7 @@ const { test, trait } = use('Test/Suite')('Update Role')
 trait('Test/ApiClient')
 trait('Auth/Client')
 
-test('update an role\\', async ({ client }) => {
+test('update an role', async ({ client }) => {
   const role = await Factory.model('App/Models/Role').create()
 
 

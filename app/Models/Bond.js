@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Bond extends Model {
+    roles() {
+        return this.hasMany('App/Models/User')
+      }
 }
 
 module.exports = Bond

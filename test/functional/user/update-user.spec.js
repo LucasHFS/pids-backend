@@ -6,45 +6,43 @@ const { test, trait } = use('Test/Suite')('Create_User')
 trait('Test/ApiClient')
 trait('Auth/Client')
 
-test('can create a User if valid data', async ({ assert, client }) => {
+test('can update a User if valid data', async ({ assert, client }) => {
 
-  const { name, email, cpf, password, role_id,  bond_id } = await Factory.model(
+  const user = await Factory.model(
     'App/Models/User'
-  ).make();
-
+  ).create();
 
   const courses = await Factory.model('App/Models/Course').createMany(3)
-
   const courses_ids = courses.map(function(c) {return c.id;});
+
+  await user.courses().attach(courses_ids);
 
 
   const data = {
-    name,
-    email,
-    cpf,
-    password,
-    bond_id,
-    role_id,
+    name: 'lucas',
+    email: 'lucas@gmail.com',
     courses: courses_ids
   }
 
   const response = await client
-    .post('/api/users')
+    .put(`/api/users/${user.id}`)
     .send(data)
     .end()
 
   console.log(response.error)
   // console.log('data',response)
 
-  response.assertStatus(201)
+  response.assertStatus(200)
 
   response.assertJSONSubset({
+    id: user.id,
     name: data.name,
     email: data.email,
-    cpf: data.cpf,
-    bond_id: data.bond_id,
-    role_id: data.role_id,
-    courses: [],
   })
 })
 
+test('status 404 if id do not exist', async ({ assert, client }) => {
+  const response = await client.get('/api/users/999').end()
+
+  response.assertStatus(404)
+})
