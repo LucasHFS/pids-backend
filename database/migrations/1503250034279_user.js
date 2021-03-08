@@ -10,6 +10,7 @@ class UserSchema extends Schema {
       table.string('email', 254).notNullable().unique()
       table.string('name', 80).notNullable()
       table.string('cpf', 11).notNullable().unique()
+      table.boolean('active').notNullable().defaultTo(true)
       table.integer('bond_id').unsigned().references('id').inTable('bonds').onDelete('cascade').index('bond_id')
       table.integer('role_id').unsigned().references('id').inTable('roles').onDelete('cascade').index('role_id')
       table.string('password', 60).notNullable()

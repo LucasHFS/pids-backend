@@ -13,7 +13,7 @@ class AuthAdmin {
     // call next to advance the request
     try {
       await auth.check();
-      if (auth.user.role !== 'admin') {
+      if (auth.user.role_id !== 1) {
         throw new Error('Need admin privileges');
       }
     } catch (error) {

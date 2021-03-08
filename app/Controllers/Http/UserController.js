@@ -12,6 +12,7 @@ class UserController {
       .with('roles')
       .with('courses')
       .with('bonds')
+      .where('active', true)
       .fetch();
 
     return response.ok(users)
@@ -20,15 +21,15 @@ class UserController {
   async show({ response, params }) {
     const user = await User.findOrFail(params.id);
     await user.loadMany(['roles', 'courses', 'bonds']);
-    return response.ok(user)
+    return response.ok(user);
   }
 
   async store({ response, request }) {
-    const { roles, courses, ...data} = request.only(['name', 'email', 'cpf', 'bond_id', 'role_id', 'password', 'courses']);
+    const { role_id, course_id, ...data} = request.only(['name', 'email', 'cpf', 'bond_id', 'role_id', 'course_id', 'password', 'courses']);
 
-    const user = await User.create(data);
+    const user = await User.create({...data, role_id: role_id || 1});
 
-    await user.courses().attach(courses);
+    await user.courses().attach(course_id);
 
     await user.loadMany(['roles', 'courses', 'bonds'])
 
@@ -57,7 +58,9 @@ class UserController {
 
     const user = await User.findOrFail(params.id)
 
-    await user.delete()
+    await user.merge({active: false})
+
+    await user.save();
 
     return response.noContent();
     
