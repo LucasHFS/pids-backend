@@ -17,11 +17,10 @@ const Bond = use('App/Models/Bond')
 class BondSeeder {
   async run () {
     await Bond.createMany([
-      { name: "Sem Vínculo com a UEG"},
+      { name: "Visitante" },
       { name: "Discente" },
-      { name: "Doscente" },
-      { name: "Colaborador" },
-      { name: "Visitante" }
+      { name: "Docente" },
+      { name: "Colaborador" }
     ])
   }
 }

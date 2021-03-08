@@ -21,7 +21,7 @@ test('can update a User if valid data', async ({ assert, client }) => {
   const data = {
     name: 'lucas',
     email: 'lucas@gmail.com',
-    courses: courses_ids
+    course_id: courses_ids
   }
 
   const response = await client

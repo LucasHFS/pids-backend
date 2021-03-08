@@ -8,7 +8,7 @@ trait('Auth/Client')
 
 test('can create a User if valid data', async ({ assert, client }) => {
 
-  const { name, email, cpf, password, role_id,  bond_id } = await Factory.model(
+  const { name, email, cpf, phone, password, role_id,  bond_id } = await Factory.model(
     'App/Models/User'
   ).make();
 
@@ -21,11 +21,12 @@ test('can create a User if valid data', async ({ assert, client }) => {
   const data = {
     name,
     email,
+    phone,
     cpf,
     password,
     bond_id,
     role_id,
-    courses: courses_ids
+    course_id: courses_ids
   }
 
   const response = await client
@@ -42,6 +43,7 @@ test('can create a User if valid data', async ({ assert, client }) => {
     name: data.name,
     email: data.email,
     cpf: data.cpf,
+    phone: data.phone,
     bond_id: data.bond_id,
     role_id: data.role_id,
     courses: [],

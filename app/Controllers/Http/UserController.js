@@ -25,7 +25,7 @@ class UserController {
   }
 
   async store({ response, request }) {
-    const { role_id, course_id, ...data} = request.only(['name', 'email', 'cpf', 'bond_id', 'role_id', 'course_id', 'password', 'courses']);
+    const { role_id, course_id, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'course_id', 'password', 'courses']);
 
     const user = await User.create({...data, role_id: role_id || 1});
 
@@ -41,7 +41,7 @@ class UserController {
 
     const user = await User.findOrFail(params.id)
 
-    const { roles, courses, ...data} = request.only(['name', 'email', 'cpf', 'bond_id', 'role_id', 'password', 'courses']);
+    const { roles, courses, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'password', 'courses']);
     
     await user.merge(data);
 

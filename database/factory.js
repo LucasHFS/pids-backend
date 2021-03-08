@@ -19,6 +19,7 @@ Factory.blueprint('App/Models/User', faker => {
     name: faker.username(),
     email: faker.email(),
     cpf: faker.cpf(),
+    phone: faker.phone(),
     bond_id: 1,
     role_id: 1,
     password: 'password123',
