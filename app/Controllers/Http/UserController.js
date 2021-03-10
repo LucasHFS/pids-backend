@@ -25,7 +25,7 @@ class UserController {
   }
 
   async store({ response, request }) {
-    const { role_id, course_id, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'course_id', 'password', 'courses']);
+    const { role_id, course_id, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'password', 'course_id']);
 
     const user = await User.create({...data, role_id: role_id || 1});
 
@@ -41,11 +41,13 @@ class UserController {
 
     const user = await User.findOrFail(params.id)
 
-    const { roles, courses, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'password', 'courses']);
+    const { roles, course_id, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'password', 'course_id']);
     
     await user.merge(data);
 
-    await user.courses().sync(courses);
+    if(course_id){
+      await user.courses().sync(courses);
+    }
     
     await user.save();
 
@@ -56,7 +58,11 @@ class UserController {
 
   async destroy({ response, params }) {
 
-    const user = await User.findOrFail(params.id)
+    const user = await User.find(params.id);
+
+    if(!user){
+      return response.status(400).json({message: 'Usuário não encontrado!'})
+    }
 
     await user.merge({active: false})
 

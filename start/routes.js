@@ -50,7 +50,7 @@ Route.group(()=>{
 Route.group(()=>{
   Route.get('/', 'UserController.all')
   Route.get('/:id', 'UserController.show')
-  Route.post('/', 'UserController.store').validator('CreateUser')
-  Route.put('/:id', 'UserController.update').validator('CreateUser')
+  Route.post('/', 'UserController.store').validator('User/CreateUser')
+  Route.put('/:id', 'UserController.update').validator('User/UpdateUser')
   Route.delete('/:id', 'UserController.destroy')
 }).prefix('/api/users');

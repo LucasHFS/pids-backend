@@ -9,8 +9,7 @@ class CreateCourses {
 
   get messages() {
     return {
-      required: '{{ field }} is required',
-      string: '{{ field }} is not a valid string'
+      required: 'O atributo Nome é obrigatório.',
     }
   }
 
