@@ -12,7 +12,6 @@ class UserController {
       .with('roles')
       .with('courses')
       .with('bonds')
-      .where('active', true)
       .fetch();
 
     return response.ok(users)
@@ -41,12 +40,12 @@ class UserController {
 
     const user = await User.findOrFail(params.id)
 
-    const { roles, course_id, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'password', 'course_id']);
+    const { roles, course_id, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'active', 'password', 'course_id']);
     
     await user.merge(data);
 
     if(course_id){
-      await user.courses().sync(courses);
+      await user.courses().sync(course_id);
     }
     
     await user.save();
