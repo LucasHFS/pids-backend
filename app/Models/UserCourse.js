@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class UserCourse extends Model {
+    static get table () {
+        return 'user_course'
+    }
 }
 
 module.exports = UserCourse

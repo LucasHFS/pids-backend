@@ -12,7 +12,11 @@ class BondController {
   }
   
   async show({ response, params }) {
-    const bond = await Bond.findOrFail(params.id)
+    const bond = await Bond.find(params.id)
+
+    if(!bond){
+      return response.notFound({message: 'Vínculo não encontrado!'})
+    }
     return response.ok(bond)
   }
 
@@ -25,7 +29,11 @@ class BondController {
 
   async update({ response, request, params }) {
 
-    const bond = await Bond.findOrFail(params.id)
+    const bond = await Bond.find(params.id)
+
+    if(!bond){
+      return response.notFound({message: 'Vínculo não encontrado!'})
+    }
 
     bond.merge(request.only(['name']));
     
@@ -36,11 +44,25 @@ class BondController {
 
   async destroy({ response, params }) {
 
-    const bond = await Bond.findOrFail(params.id)
+    const bond = await Bond.find(params.id)
 
-    await bond.delete()
+    if(!bond){
+      return response.notFound({message: 'Vínculo não encontrado!'})
+    }
 
-    return response.noContent();
+    let relatedUsers = await bond.users().fetch();
+
+    relatedUsers = relatedUsers.toJSON();
+
+    if(!relatedUsers || relatedUsers.length < 1){
+      await bond.delete()
+      return response.noContent();
+    }else{
+      const relUsers = relatedUsers.map(user=> {
+        return {id: user.id, name:user.name}
+      });
+      return response.badRequest({error: 'Não é possível excluir esse Papel, pois há usuários cadastrados com ele.', users: relUsers})
+    }
     
   }
 

@@ -4,7 +4,7 @@
 const Model = use('Model')
 
 class Bond extends Model {
-    roles() {
+    users() {
         return this.hasMany('App/Models/User')
       }
 }

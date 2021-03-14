@@ -12,7 +12,11 @@ class CourseController {
   }
   
   async show({ response, params }) {
-    const course = await Course.findOrFail(params.id)
+    const course = await Course.find(params.id)
+
+    if(!course){
+      return response.notFound({message: 'Curso não encontrado!'})
+    }
     return response.ok(course)
   }
 
@@ -25,7 +29,11 @@ class CourseController {
 
   async update({ response, request, params }) {
 
-    const course = await Course.findOrFail(params.id)
+    const course = await Course.find(params.id)
+
+    if(!course){
+      return response.notFound({message: 'Curso não encontrado!'})
+    }
 
     course.merge(request.only(['name']));
     
@@ -36,14 +44,26 @@ class CourseController {
 
   async destroy({ response, params }) {
 
-    const course = await Course.findOrFail(params.id)
+    const course = await Course.find(params.id)
 
-    await course.delete()
+    if(!course){
+      return response.notFound({message: 'Curso não encontrado!'})
+    }
 
-    return response.noContent();
-    
+    let relatedUsers = await course.users().fetch();
+
+    relatedUsers = relatedUsers.toJSON();
+
+    if(!relatedUsers || relatedUsers.length < 1){
+      await course.delete()
+      return response.noContent();
+    }else{
+      const relUsers = relatedUsers.map(user=> {
+        return {id: user.id, name:user.name}
+      });
+      return response.badRequest({error: 'Não é possível excluir esse Papel, pois há usuários cadastrados com ele.', users: relUsers})
+    }
   }
-
 }
 
 module.exports = CourseController

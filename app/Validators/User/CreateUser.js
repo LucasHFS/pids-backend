@@ -4,8 +4,8 @@ class CreateCourses {
   get rules() {
     return {
       name: 'required|string', 
-      email: 'required|email|unique:users', 
-      cpf: 'required|min:11|max:11|string|unique:users', 
+      email: `required|email|unique:users, email,active,${0}`, 
+      cpf: `required|min:11|max:11|string|unique:users,cpf,active,${0}`, 
       bond_id: 'required|number', 
       role_id: 'number', 
       course_id: 'required', 

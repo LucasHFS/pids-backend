@@ -53,4 +53,5 @@ Route.group(()=>{
   Route.post('/', 'UserController.store').validator('User/CreateUser')
   Route.put('/:id', 'UserController.update').validator('User/UpdateUser')
   Route.delete('/:id', 'UserController.destroy')
+  Route.delete('/inactive/:id', 'UserController.inactive')
 }).prefix('/api/users');

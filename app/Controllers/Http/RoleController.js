@@ -12,7 +12,10 @@ class RoleController {
   }
   
   async show({ response, params }) {
-    const role = await Role.findOrFail(params.id)
+    const role = await Role.find(params.id)
+    if(!role){
+      return response.notFound({message: 'Papel não encontrado!'})
+    }
     return response.ok(role)
   }
 
@@ -25,7 +28,11 @@ class RoleController {
 
   async update({ response, request, params }) {
 
-    const role = await Role.findOrFail(params.id)
+    const role = await Role.find(params.id)
+
+    if(!role){
+      return response.notFound({message: 'Papel não encontrado!'})
+    }
 
     role.merge(request.only(['name', 'description']));
     
@@ -36,11 +43,25 @@ class RoleController {
 
   async destroy({ response, params }) {
 
-    const role = await Role.findOrFail(params.id)
+    const role = await Role.find(params.id);
 
-    await role.delete()
+    if(!role){
+      return response.notFound({error: 'Papel não encontrado!'})
+    }
 
-    return response.noContent();
+    let relatedUsers = await role.users().fetch();
+
+    relatedUsers = relatedUsers.toJSON();
+
+    if(!relatedUsers || relatedUsers.length < 1){
+      await role.delete()
+      return response.noContent();
+    }else{
+      const relUsers = relatedUsers.map(user=> {
+        return {id: user.id, name:user.name}
+      });
+      return response.badRequest({error: 'Não é possível excluir esse Papel, pois há usuários cadastrados com ele.', users: relUsers})
+    }
     
   }
 

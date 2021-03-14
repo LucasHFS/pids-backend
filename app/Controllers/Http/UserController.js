@@ -9,6 +9,7 @@ class UserController {
   async all({ response, request }) {
     const users = await User
       .query()
+      // .where('active',1 )
       .with('roles')
       .with('courses')
       .with('bonds')
@@ -30,7 +31,7 @@ class UserController {
 
     await user.courses().attach(course_id);
 
-    await user.loadMany(['roles', 'courses', 'bonds'])
+    await user.loadMany(['courses', 'bonds'])
 
     return response.created(user)
   }
@@ -38,10 +39,18 @@ class UserController {
   async update({ response, request, params }) {
     
 
-    const user = await User.findOrFail(params.id)
+    const user = await User.find(params.id)
 
-    const { roles, course_id, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'active', 'password', 'course_id']);
+    if(!user){
+      return response.notFound({error: 'Usuário não encontrado!'})
+    }
+
+    const { roles, course_id, password, ...data} = request.only(['name', 'email', 'cpf', 'phone', 'bond_id', 'role_id', 'active', 'password', 'course_id']);
     
+    if(password){
+      await user.merge({...data, password});
+    }
+
     await user.merge(data);
 
     if(course_id){
@@ -60,7 +69,20 @@ class UserController {
     const user = await User.find(params.id);
 
     if(!user){
-      return response.status(400).json({message: 'Usuário não encontrado!'})
+      return response.notFound({message: 'Usuário não encontrado!'})
+    }
+
+    await user.delete();
+
+    return response.noContent();
+  }
+
+  async inactive({ response, params }) {
+
+    const user = await User.find(params.id);
+
+    if(!user){
+      return response.notFound({message: 'Usuário não encontrado!'})
     }
 
     await user.merge({active: false})
